@@ -17,6 +17,8 @@ Once you've set your places, fetch data by running ```safari-json-build.py```. T
 python safari-json-build.py
 ```
 
+```safari-json-build.py``` is designed to fetch observations filtered for the current and prior month-of-year. That means you should re-run it at on a monthly basis to keep it current to what people should actually be able to observe at this time of year.
+
 
 ## Running the webpage
 
