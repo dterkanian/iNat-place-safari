@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Taxa</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 1200px;
+            margin: 40px auto;
+            padding: 0 20px;
+            background: #f5f5f5;
+        }
+
+        #place-select {
+            font-size: 16px;
+            padding: 8px 12px;
+            margin: 10px 0 25px;
+            min-width: 300px;
+        }
+
+        label {
+            font-weight: bold;
+        }
+
+        #taxa {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 25px;
+        }
+
+        .taxon-card {
+            background: white;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+        }
+
+        .taxon-card h2 {
+            margin-top: 0;
+            margin-bottom: 5px;
+            font-size: 24px;
+        }
+
+        .scientific-name {
+            font-style: italic;
+            font-size: 18px;
+            margin-bottom: 20px;
+        }
+
+        .native-status {
+            font-size: 14px;
+            margin-bottom: 15px;
+        }
+
+        .resources h3 {
+            margin-bottom: 5px;
+            font-size: 16px;
+        }
+
+        .resources ul {
+            margin-top: 5px;
+            padding-left: 25px;
+        }
+
+        .resources li {
+            margin-bottom: 5px;
+        }
+
+        .photos {
+            margin-top: 20px;
+        }
+
+        .photos h3 {
+            margin-bottom: 10px;
+            font-size: 16px;
+        }
+
+        .photo-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+        }
+
+        .photo {
+            min-width: 0;
+        }
+
+        .photo a {
+            display: block;
+        }
+
+        .photo img {
+            display: block;
+            width: 100%;
+            aspect-ratio: 1 / 1;
+            object-fit: cover;
+            border-radius: 5px;
+        }
+
+        .attribution {
+            display: block;
+            margin-top: 4px;
+            font-size: 11px;
+            line-height: 1.3;
+            color: #555;
+        }
+
+        .attribution a {
+            color: inherit;
+        }
+
+        @media (max-width: 700px) {
+            #taxa {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        #place-subtitle h2 {
+            margin-top: -10px;
+            margin-bottom: 4px;
+            font-size: 22px;
+            font-weight: normal;
+            color: #555;
+        }
+
+        .place-link {
+            margin-bottom: 25px;
+            font-size: 13px;
+        }
+
+        .place-link a {
+            color: #666;
+        }        
+    </style>
+</head>
+
+<body>
+
+    <h1>Taxa</h1>
+    <div id="place-subtitle"></div>
+
+    <label for="place-select">Choose a place:</label>
+
+    <select id="place-select"></select>
+
+    <div id="taxa"></div>
+
+    <div id="place-link"></div>
+
+    <script src="safari.js"></script>
+
+</body>
+
+</html>
