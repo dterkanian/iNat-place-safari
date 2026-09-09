@@ -36,9 +36,11 @@ is_last_loop_rate_limited = False
 sleep_duration_multiplier = 1
 sleep_duration_base = 2
 max_rank = 'complex'
+iconic_taxa_list = ['Plantae']
+iconic_taxa = ','.join(iconic_taxa_list)
 
 while is_fetch_more_data:
-    url = f"https://api.inaturalist.org/v2/observations?verifiable=true&hrank={max_rank}&place_id={place_id}&month={month_csv}&iconic_taxa=Plantae&fields={fields}&page={page_num}"
+    url = f"https://api.inaturalist.org/v2/observations?verifiable=true&hrank={max_rank}&place_id={place_id}&month={month_csv}&iconic_taxa={iconic_taxa}&fields={fields}&page={page_num}"
     print(url)
     response = requests.get(url)
     if response.status_code == 200:
