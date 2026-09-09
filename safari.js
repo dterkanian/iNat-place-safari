@@ -258,14 +258,13 @@ function displayRandomTaxa(results) {
      * Make sure there are enough results.
      */
     if (
-        nativeTaxa.length < 3 ||
+        nativeTaxa.length < 1 &&
         nonNativeTaxa.length < 1
     ) {
 
         document.getElementById("taxa").innerHTML = `
             <p>
-                Not enough taxa are available for this place
-                to show 3 native and 1 non-native species.
+                No taxa are available for this place.
             </p>
         `;
 
