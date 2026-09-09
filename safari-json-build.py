@@ -16,6 +16,7 @@ place_id = ','.join([str(x) for x in place_id_list])
 fields = "id,name"
 url = f"https://api.inaturalist.org/v2/places/{place_id}?fields={fields}"
 
+safari_json = {}
 response = requests.get(url)
 if response.status_code == 200:
     data = response.json()
@@ -26,7 +27,8 @@ if response.status_code == 200:
 month_number = datetime.date.today().month
 last_month_number = (month_number + 11) % 12
 month_csv = ','.join([str(last_month_number), str(month_number)])
-fields = "place_ids,taxon.native,taxon.name,taxon.preferred_common_name,taxon.wikipedia_url,photos.attribution,photos.url"
+fields = "place_ids,taxon.native,taxon.name,taxon.preferred_common_name,taxon.wikipedia_url,taxon.rank_level,photos.attribution,photos.url"
+species_or_finer_rank_level = 10
 
 taxa_prelim = []
 
@@ -64,10 +66,16 @@ while is_fetch_more_data:
     else:
         print(f"{response.status_code} - {response.text}")
 
+def upsize_photo_url(url, size="medium"):
+    return url.replace("square", size)
+
 taxa = {}
 
 if taxa_prelim:
     for d in taxa_prelim:
+        rank_level = d['taxon'].get('rank_level')
+        if rank_level is None or rank_level > species_or_finer_rank_level:
+            continue
         taxon_id = d['taxon']['id']
         if taxon_id in taxa.keys():
             taxa[taxon_id]['count'] += 1
@@ -77,11 +85,11 @@ if taxa_prelim:
                 'count': 1, 
                 'taxon': d['taxon'],
                 'place_ids': [x for x in place_id_list if x in d['place_ids']],
-                'photos': d['photos'],
+                'photos': [{**p, 'url': upsize_photo_url(p['url'])} for p in d['photos']],
                 }
 
 if taxa:
-    taxa_list = [v for k,v in taxa.items()]
+    taxa_list = list(taxa.values())
     safari_json['taxa'] = {'results': taxa_list}
 
 if safari_json:

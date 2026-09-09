@@ -1,7 +1,7 @@
 let allTaxa = [];
 let places = [];
 
-fetch("iNat-safari.json")
+fetch("inat-safari.json")
     .then(response => {
         if (!response.ok) {
             throw new Error("Could not load iNat-safari.json");
