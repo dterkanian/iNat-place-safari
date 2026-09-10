@@ -27,8 +27,7 @@ if response.status_code == 200:
 month_number = datetime.date.today().month
 last_month_number = (month_number + 11) % 12
 month_csv = ','.join([str(last_month_number), str(month_number)])
-fields = "place_ids,taxon.native,taxon.name,taxon.preferred_common_name,taxon.wikipedia_url,taxon.rank_level,photos.attribution,photos.url"
-species_or_finer_rank_level = 10
+fields = "place_ids,taxon.native,taxon.name,taxon.preferred_common_name,taxon.wikipedia_url,photos.attribution,photos.url"
 
 taxa_prelim = []
 
@@ -73,9 +72,6 @@ taxa = {}
 
 if taxa_prelim:
     for d in taxa_prelim:
-        rank_level = d['taxon'].get('rank_level')
-        if rank_level is None or rank_level > species_or_finer_rank_level:
-            continue
         taxon_id = d['taxon']['id']
         if taxon_id in taxa.keys():
             taxa[taxon_id]['count'] += 1
