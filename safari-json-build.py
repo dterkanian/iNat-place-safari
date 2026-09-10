@@ -16,6 +16,7 @@ place_id = ','.join([str(x) for x in place_id_list])
 fields = "id,name"
 url = f"https://api.inaturalist.org/v2/places/{place_id}?fields={fields}"
 
+safari_json = {}
 response = requests.get(url)
 if response.status_code == 200:
     data = response.json()
@@ -64,6 +65,9 @@ while is_fetch_more_data:
     else:
         print(f"{response.status_code} - {response.text}")
 
+def upsize_photo_url(url, size="medium"):
+    return url.replace("square", size)
+
 taxa = {}
 
 if taxa_prelim:
@@ -77,11 +81,11 @@ if taxa_prelim:
                 'count': 1, 
                 'taxon': d['taxon'],
                 'place_ids': [x for x in place_id_list if x in d['place_ids']],
-                'photos': d['photos'],
+                'photos': [{**p, 'url': upsize_photo_url(p['url'])} for p in d['photos']],
                 }
 
 if taxa:
-    taxa_list = [v for k,v in taxa.items()]
+    taxa_list = list(taxa.values())
     safari_json['taxa'] = {'results': taxa_list}
 
 if safari_json:
