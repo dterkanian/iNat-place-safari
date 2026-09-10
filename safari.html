@@ -138,6 +138,93 @@
         .place-link a {
             color: #666;
         }        
+
+        #help-button {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+
+            width: 40px;
+            height: 40px;
+
+            border: none;
+            border-radius: 50%;
+
+            background: #555;
+            color: white;
+
+            font-size: 24px;
+            font-weight: bold;
+            line-height: 40px;
+
+            cursor: pointer;
+            z-index: 1000;
+        }
+
+        #help-button:hover {
+            background: #333;
+        }
+
+        .modal {
+            display: none;
+
+            position: fixed;
+            z-index: 2000;
+            left: 0;
+            top: 0;
+
+            width: 100%;
+            height: 100%;
+
+            background: rgba(0, 0, 0, 0.5);
+
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal.show {
+            display: flex;
+        }
+
+        .modal-content {
+            position: relative;
+
+            width: 90%;
+            max-width: 600px;
+
+            padding: 30px;
+
+            background: white;
+            border-radius: 10px;
+
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25);
+        }
+
+        .modal-content h2 {
+            margin-top: 0;
+        }
+
+        .modal-content p {
+            line-height: 1.6;
+        }
+
+        .close-button {
+            position: absolute;
+            top: 10px;
+            right: 15px;
+
+            border: none;
+            background: none;
+
+            font-size: 30px;
+            color: #666;
+
+            cursor: pointer;
+        }
+
+        .close-button:hover {
+            color: #000;
+        }
     </style>
 </head>
 
@@ -153,6 +240,42 @@
     <div id="taxa"></div>
 
     <div id="place-link"></div>
+    
+    <button id="help-button" aria-label="Show instructions">?</button>
+    
+    <div id="instructions-modal" class="modal" aria-hidden="true">
+        <div class="modal-content" role="dialog" aria-modal="true" aria-labelledby="instructions-title">
+            <button id="close-modal" class="close-button" aria-label="Close instructions">
+                &times;
+            </button>
+            
+            <h2 id="instructions-title">Instructions</h2>
+            
+            <p>
+                Go on a mini safari as you search for four different plants: 
+                3 native plants and 1 introduced. 
+            </p>
+            
+            <p>
+                Use the pictures provided and the links on each plant card 
+                to learn how to identify the plant.
+            </p>
+            
+            <p>
+                Think you found your plant? Use the iNaturalist app to post your observation and 
+                see if you identified it correctly.
+            </p>
+            
+            <div style="display: flex; flex-direction: row; justify-content: space-between;">
+                <a href="https://play.google.com/store/apps/details?id=org.inaturalist.android">
+                    <img alt="Android app on Google Play" src="https://static.inaturalist.org/wiki_page_attachments/412-original.png" style="display:block; max-height: 42px; max-width: 100%; margin: 0 auto 18px;">
+                </a>       
+                <a href="https://apps.apple.com/app/apple-store/id6475737561?pt=475606&amp;ct=Web:%20iNaturalist%20footer&amp;mt=8">
+                    <img alt="iPhone app in the Apple App Store" src="https://static.inaturalist.org/wiki_page_attachments/414-original.png" style="display:block; max-height: 42px; max-width: 100%; margin: 0 auto;">
+                </a>     
+            </div>
+        </div>
+    </div>
 
     <script src="safari.js"></script>
 

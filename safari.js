@@ -443,3 +443,33 @@ function displayTaxa(results) {
         container.appendChild(card);
     });
 }
+
+const helpButton = document.getElementById("help-button");
+const instructionsModal = document.getElementById("instructions-modal");
+const closeModal = document.getElementById("close-modal");
+
+helpButton.addEventListener("click", () => {
+    instructionsModal.classList.add("show");
+    instructionsModal.setAttribute("aria-hidden", "false");
+});
+
+closeModal.addEventListener("click", () => {
+    instructionsModal.classList.remove("show");
+    instructionsModal.setAttribute("aria-hidden", "true");
+});
+
+// Close when clicking the dark area outside the dialog
+instructionsModal.addEventListener("click", (event) => {
+    if (event.target === instructionsModal) {
+        instructionsModal.classList.remove("show");
+        instructionsModal.setAttribute("aria-hidden", "true");
+    }
+});
+
+// Close with the Escape key
+document.addEventListener("keydown", (event) => {
+    if (event.key === "Escape") {
+        instructionsModal.classList.remove("show");
+        instructionsModal.setAttribute("aria-hidden", "true");
+    }
+});
