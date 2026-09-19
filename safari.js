@@ -267,8 +267,6 @@ function displayRandomTaxa(results) {
                 No taxa are available for this place.
             </p>
         `;
-
-        return;
     }
 
 
