@@ -4,7 +4,7 @@ let places = [];
 fetch("inat-safari.json")
     .then(response => {
         if (!response.ok) {
-            throw new Error("Could not load iNat-safari.json");
+            throw new Error("Could not load inat-safari.json");
         }
 
         return response.json();
@@ -19,7 +19,7 @@ fetch("inat-safari.json")
         console.error(error);
 
         document.getElementById("taxa").innerHTML =
-            `<p>Error loading iNat-safari.json: ${error.message}</p>`;
+            `<p>Error loading inat-safari.json: ${error.message}</p>`;
     });
 
 
