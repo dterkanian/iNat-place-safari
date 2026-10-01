@@ -179,36 +179,62 @@ function initializePage() {
 
 
     /*
-     * Multiple places and no URL slug:
-     * show the dropdown.
+     * Multiple places:
+     *
+     * Sort a copy alphabetically so that:
+     *
+     *   1. The dropdown is alphabetized.
+     *   2. The first place in the dropdown is selected
+     *      by default.
+     *
+     * The original places array remains unchanged.
      */
 
+    const sortedPlaces =
+        [...places].sort(
+            (a, b) =>
+                a.name.localeCompare(
+                    b.name,
+                    undefined,
+                    {
+                        sensitivity: "base"
+                    }
+                )
+        );
+
+
     populatePlaceDropdown(
-        places
+        sortedPlaces
     );
 
 
-    // Select the first place by default.
+    // Select the first alphabetized place by default.
 
-    if (places.length > 0) {
+    if (sortedPlaces.length > 0) {
+
+        const firstPlace =
+            sortedPlaces[0];
+
 
         displayTaxaForPlace(
-            places[0].id
+            firstPlace.id
         );
 
         document.getElementById(
             "place-select"
-        ).value = places[0].id;
+        ).value =
+            firstPlace.id;
 
         displayPlaceLink(
-            places[0]
+            firstPlace
         );
 
         displayPlaceSubtitle(
-            places[0]
+            firstPlace
         );
     }
 }
+
 
 
 // ============================================================
