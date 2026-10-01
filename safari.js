@@ -1,6 +1,11 @@
 let allTaxa = [];
 let places = [];
 
+
+// ============================================================
+// Load safari data
+// ============================================================
+
 fetch("inat-safari.json")
     .then(response => {
         if (!response.ok) {
@@ -23,6 +28,10 @@ fetch("inat-safari.json")
     });
 
 
+// ============================================================
+// Place link
+// ============================================================
+
 function displayPlaceLink(place) {
 
     const container =
@@ -44,58 +53,95 @@ function displayPlaceLink(place) {
 }
 
 
+// ============================================================
+// Place subtitle
+// ============================================================
+
 function displayPlaceSubtitle(place) {
-    const container = document.getElementById("place-subtitle");
+
+    const container =
+        document.getElementById("place-subtitle");
 
     if (place) {
+
         const inaturalistPlaceUrl =
             `https://www.inaturalist.org/places/${place.id}`;
 
         container.innerHTML = `
             <h2>${place.name}</h2>
+
             <div class="place-link">
-                <a href="${inaturalistPlaceUrl}"
-                   target="_blank"
-                   rel="noopener noreferrer">
+                <a
+                    href="${inaturalistPlaceUrl}"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                >
                     View this place on iNaturalist
                 </a>
             </div>
         `;
+
     } else {
+
         container.innerHTML = "";
     }
 }
 
+
+// ============================================================
+// Initialize page
+// ============================================================
+
 function initializePage() {
 
-    const urlParams = new URLSearchParams(window.location.search);
-    const requestedSlug = urlParams.get("place");
+    const urlParams =
+        new URLSearchParams(
+            window.location.search
+        );
+
+    const requestedSlug =
+        urlParams.get("place");
+
 
     /*
      * If a place slug was supplied in the URL,
      * use it and hide the dropdown.
      */
+
     if (requestedSlug) {
 
-        const selectedPlace = places.find(place =>
-            createSlug(place.name) === requestedSlug
-        );
+        const selectedPlace =
+            places.find(place =>
+                createSlug(place.name) === requestedSlug
+            );
+
 
         if (selectedPlace) {
 
             hidePlaceSelector();
 
-            displayTaxaForPlace(selectedPlace.id);
-            displayPlaceLink(selectedPlace);
-            displayPlaceSubtitle(selectedPlace);
+            displayTaxaForPlace(
+                selectedPlace.id
+            );
+
+            displayPlaceLink(
+                selectedPlace
+            );
+
+            displayPlaceSubtitle(
+                selectedPlace
+            );
 
             return;
         }
 
+
         // A slug was supplied but doesn't match a place.
+
         document.getElementById("taxa").innerHTML = `
             <p>
-                Place "<strong>${requestedSlug}</strong>" was not found.
+                Place "<strong>${requestedSlug}</strong>"
+                was not found.
             </p>
         `;
 
@@ -111,13 +157,22 @@ function initializePage() {
      * If there is only one place, hide the selector
      * and automatically display that place.
      */
+
     if (places.length === 1) {
 
         hidePlaceSelector();
 
-        displayTaxaForPlace(places[0].id);
-        displayPlaceLink(places[0]);
-        displayPlaceSubtitle(places[0]);
+        displayTaxaForPlace(
+            places[0].id
+        );
+
+        displayPlaceLink(
+            places[0]
+        );
+
+        displayPlaceSubtitle(
+            places[0]
+        );
 
         return;
     }
@@ -127,31 +182,39 @@ function initializePage() {
      * Multiple places and no URL slug:
      * show the dropdown.
      */
-    populatePlaceDropdown(places);
 
-    // Don't automatically show all taxa.
+    populatePlaceDropdown(
+        places
+    );
+
+
     // Select the first place by default.
+
     if (places.length > 0) {
-        displayTaxaForPlace(places[0].id);
-        document.getElementById("place-select").value =
-            places[0].id;
-        displayPlaceLink(places[0]);
-        displayPlaceSubtitle(places[0]);
+
+        displayTaxaForPlace(
+            places[0].id
+        );
+
+        document.getElementById(
+            "place-select"
+        ).value = places[0].id;
+
+        displayPlaceLink(
+            places[0]
+        );
+
+        displayPlaceSubtitle(
+            places[0]
+        );
     }
 }
 
 
-/*
- * Convert a place name into a URL-friendly slug.
- *
- * Example:
- *
- * "Mt Tom~Easthampton/Holyoke"
- *
- * becomes:
- *
- * "mt-tom-easthampton-holyoke"
- */
+// ============================================================
+// Create URL slug
+// ============================================================
+
 function createSlug(name) {
 
     return name
@@ -162,16 +225,22 @@ function createSlug(name) {
 }
 
 
-/*
- * Hide both the label and dropdown.
- */
+// ============================================================
+// Hide place selector
+// ============================================================
+
 function hidePlaceSelector() {
 
     const select =
-        document.getElementById("place-select");
+        document.getElementById(
+            "place-select"
+        );
 
     const label =
-        document.querySelector('label[for="place-select"]');
+        document.querySelector(
+            'label[for="place-select"]'
+        );
+
 
     if (select) {
         select.style.display = "none";
@@ -183,98 +252,356 @@ function hidePlaceSelector() {
 }
 
 
-/*
- * Populate the dropdown.
- *
- * Notice that there is intentionally NO
- * "All places" option.
- */
-function populatePlaceDropdown(places) {
+// ============================================================
+// Populate place dropdown
+// ============================================================
+
+function populatePlaceDropdown(
+    places
+) {
 
     const select =
-        document.getElementById("place-select");
+        document.getElementById(
+            "place-select"
+        );
+
 
     places.forEach(place => {
 
         const option =
-            document.createElement("option");
-
-        option.value = place.id;
-        option.textContent = place.name;
-
-        select.appendChild(option);
-    });
-
-
-    select.addEventListener("change", () => {
-
-        const selectedPlaceId =
-            Number(select.value);
-
-        const selectedPlace =
-            places.find(place =>
-                place.id === selectedPlaceId
+            document.createElement(
+                "option"
             );
 
-        displayTaxaForPlace(selectedPlaceId);
-        displayPlaceLink(selectedPlace);
-        displayPlaceSubtitle(selectedPlace);
+        option.value =
+            place.id;
+
+        option.textContent =
+            place.name;
+
+        select.appendChild(
+            option
+        );
     });
+
+
+    select.addEventListener(
+        "change",
+        () => {
+
+            const selectedPlaceId =
+                Number(
+                    select.value
+                );
+
+            const selectedPlace =
+                places.find(
+                    place =>
+                        place.id ===
+                        selectedPlaceId
+                );
+
+
+            displayTaxaForPlace(
+                selectedPlaceId
+            );
+
+            displayPlaceLink(
+                selectedPlace
+            );
+
+            displayPlaceSubtitle(
+                selectedPlace
+            );
+        }
+    );
 }
 
 
-/*
- * Filter taxa by place_id.
- */
-function displayTaxaForPlace(placeId) {
+// ============================================================
+// Get current week of year
+// ============================================================
 
-    const filteredTaxa =
-        allTaxa.filter(result =>
-            result.place_ids &&
-            result.place_ids.includes(placeId)
+function getWeekOfYear() {
+
+    const date =
+        new Date();
+
+    const startOfYear =
+        new Date(
+            date.getFullYear(),
+            0,
+            1
         );
 
-    displayRandomTaxa(filteredTaxa);
+
+    const daysSinceStart =
+        Math.floor(
+            (
+                date - startOfYear
+            ) /
+            (
+                24 * 60 * 60 * 1000
+            )
+        );
+
+
+    return Math.floor(
+        daysSinceStart / 7
+    ) + 1;
 }
 
 
-/*
- * Select 3 native and 1 non-native taxon.
- */
-function displayRandomTaxa(results) {
+// ============================================================
+// Get weeks surrounding the current week
+// ============================================================
+//
+// The seasonal window is centered on the current week.
+//
+// For example, with a window of 3:
+//
+//     current week = 20
+//
+//     seasonal weeks =
+//     17, 18, 19, 20, 21, 22, 23
+//
+// The calculation wraps around the beginning/end of
+// the year.
+//
+
+function getSeasonalWeeks(
+    currentWeek,
+    windowSize
+) {
+
+    const weeks = [];
+
+    const totalWeeks = 53;
+
+
+    for (
+        let offset = -windowSize;
+        offset <= windowSize;
+        offset++
+    ) {
+
+        let week =
+            currentWeek + offset;
+
+
+        if (week < 1) {
+            week += totalWeeks;
+        }
+
+        if (week > totalWeeks) {
+            week -= totalWeeks;
+        }
+
+
+        weeks.push(
+            week
+        );
+    }
+
+
+    return weeks;
+}
+
+
+// ============================================================
+// Check whether a taxon is seasonally appropriate
+// ============================================================
+//
+// Histogram structure:
+//
+// result.histograms[placeId] = {
+//     radius_km: ...,
+//     interval: "week_of_year",
+//     seasonal_window_weeks: 3,
+//     total_results: ...,
+//     counts: {
+//         "1": 10,
+//         "2": 14,
+//         ...
+//     }
+// }
+//
+// The histogram is used ONLY for selection.
+// It is not displayed on the card.
+//
+
+function isSeasonallyAppropriate(
+    result,
+    placeId
+) {
+
+    if (
+        !result.histograms
+    ) {
+        return false;
+    }
+
+
+    const histogram =
+        result.histograms[
+            String(placeId)
+        ];
+
+
+    if (
+        !histogram ||
+        !histogram.counts
+    ) {
+        return false;
+    }
+
+
+    const windowSize =
+        Number(
+            histogram.seasonal_window_weeks
+        ) || 3;
+
+
+    const currentWeek =
+        getWeekOfYear();
+
+
+    const seasonalWeeks =
+        getSeasonalWeeks(
+            currentWeek,
+            windowSize
+        );
+
+
+    /*
+     * Sum the observations occurring during
+     * the current seasonal window.
+     */
+
+    let seasonalCount = 0;
+
+
+    seasonalWeeks.forEach(
+        week => {
+
+            seasonalCount +=
+                Number(
+                    histogram.counts[
+                        String(week)
+                    ]
+                ) || 0;
+        }
+    );
+
+
+    return seasonalCount > 0;
+}
+
+
+// ============================================================
+// Filter taxa by place and season
+// ============================================================
+
+function displayTaxaForPlace(
+    placeId
+) {
+
+    /*
+     * First filter by the selected place.
+     *
+     * This guarantees that nearby observations used
+     * for the seasonal histogram cannot introduce
+     * a plant that was not actually observed at the
+     * selected place.
+     */
+
+    const placeTaxa =
+        allTaxa.filter(
+            result =>
+                result.place_ids &&
+                result.place_ids.includes(
+                    placeId
+                )
+        );
+
+
+    /*
+     * Then use the histogram to determine which
+     * of those place taxa are seasonally appropriate.
+     */
+
+    const seasonalTaxa =
+        placeTaxa.filter(
+            result =>
+                isSeasonallyAppropriate(
+                    result,
+                    placeId
+                )
+        );
+
+
+    displayRandomTaxa(
+        seasonalTaxa
+    );
+}
+
+
+// ============================================================
+// Select 3 native and 1 non-native taxon
+// ============================================================
+
+function displayRandomTaxa(
+    results
+) {
 
     const nativeTaxa =
-        results.filter(result =>
-            result.taxon.native === true
+        results.filter(
+            result =>
+                result.taxon.native === true
         );
 
+
     const nonNativeTaxa =
-        results.filter(result =>
-            result.taxon.native === false
+        results.filter(
+            result =>
+                result.taxon.native === false
         );
 
 
     /*
      * Make sure there are enough results.
      */
+
     if (
         nativeTaxa.length < 1 &&
         nonNativeTaxa.length < 1
     ) {
 
-        document.getElementById("taxa").innerHTML = `
+        document.getElementById(
+            "taxa"
+        ).innerHTML = `
             <p>
-                No taxa are available for this place.
+                No seasonally appropriate taxa
+                are available for this place.
             </p>
         `;
+
+        return;
     }
 
 
     const selectedNative =
-        getRandomItems(nativeTaxa, 3);
+        getRandomItems(
+            nativeTaxa,
+            3
+        );
+
 
     const selectedNonNative =
-        getRandomItems(nonNativeTaxa, 1);
+        getRandomItems(
+            nonNativeTaxa,
+            1
+        );
 
 
     const selectedTaxa = [
@@ -283,191 +610,328 @@ function displayRandomTaxa(results) {
     ];
 
 
-    displayTaxa(selectedTaxa);
+    displayTaxa(
+        selectedTaxa
+    );
 }
 
 
-/*
- * Pick random items without modifying
- * the original array.
- */
-function getRandomItems(array, number) {
+// ============================================================
+// Random selection
+// ============================================================
 
-    const shuffled = [...array]
-        .sort(() => Math.random() - 0.5);
+function getRandomItems(
+    array,
+    number
+) {
 
-    return shuffled.slice(0, number);
+    const shuffled =
+        [...array].sort(
+            () => Math.random() - 0.5
+        );
+
+    return shuffled.slice(
+        0,
+        number
+    );
 }
 
 
-/*
- * Build the taxon cards.
- */
-function displayTaxa(results) {
+// ============================================================
+// Build taxon cards
+// ============================================================
+
+function displayTaxa(
+    results
+) {
 
     const container =
-        document.getElementById("taxa");
+        document.getElementById(
+            "taxa"
+        );
+
 
     container.innerHTML = "";
 
 
-    results.forEach(result => {
+    results.forEach(
+        result => {
 
-        const taxon = result.taxon;
-
-        const inaturalistUrl =
-            `https://www.inaturalist.org/taxa/${taxon.id}`;
-
-
-        let photosHTML = "";
+            const taxon =
+                result.taxon;
 
 
-        if (
-            result.photos &&
-            result.photos.length > 0
-        ) {
+            const inaturalistUrl =
+                `https://www.inaturalist.org/taxa/${taxon.id}`;
 
-            photosHTML = result.photos
-                .map(photo => {
 
-                    return `
-                        <div class="photo">
+            // ------------------------------------------------
+            // Photos
+            // ------------------------------------------------
+            //
+            // Only display the first six photos.
+            //
 
+            let photosHTML = "";
+
+
+            if (
+                result.photos &&
+                result.photos.length > 0
+            ) {
+
+                const photos =
+                    result.photos.slice(
+                        0,
+                        6
+                    );
+
+
+                photosHTML =
+                    photos
+                        .map(
+                            photo => {
+
+                                return `
+                                    <div class="photo">
+
+                                        <a
+                                            href="${photo.url}"
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                        >
+
+                                            <img
+                                                src="${photo.url}"
+                                                alt="${
+                                                    taxon.preferred_common_name ||
+                                                    taxon.name
+                                                }"
+                                            >
+
+                                        </a>
+
+                                        <div class="attribution">
+
+                                            <a
+                                                href="${photo.url}"
+                                                target="_blank"
+                                                rel="noopener noreferrer"
+                                            >
+                                                ${photo.attribution}
+                                            </a>
+
+                                        </div>
+
+                                    </div>
+                                `;
+                            }
+                        )
+                        .join("");
+            }
+
+
+            // ------------------------------------------------
+            // Card
+            // ------------------------------------------------
+
+            const card =
+                document.createElement(
+                    "div"
+                );
+
+
+            card.className =
+                "taxon-card";
+
+
+            card.innerHTML = `
+
+                <h2>
+                    ${
+                        taxon.preferred_common_name ||
+                        "Unknown"
+                    }
+                </h2>
+
+                <div class="scientific-name">
+                    <i>${taxon.name}</i>
+                </div>
+
+                <div class="native-status">
+                    ${
+                        taxon.native
+                            ? "Native"
+                            : "Non-native"
+                    }
+                </div>
+
+
+                <div class="resources">
+
+                    <h3>
+                        Identification resources
+                    </h3>
+
+                    <ul>
+
+                        <li>
                             <a
-                                href="${photo.url}"
+                                href="${inaturalistUrl}"
                                 target="_blank"
                                 rel="noopener noreferrer"
                             >
-                                <img
-                                    src="${photo.url}"
-                                    alt="${taxon.preferred_common_name || taxon.name}"
-                                >
+                                iNaturalist
                             </a>
+                        </li>
 
-                            <div class="attribution">
+                        ${
+                            taxon.wikipedia_url
+                                ? `
+                                    <li>
+                                        <a
+                                            href="${taxon.wikipedia_url}"
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                        >
+                                            Wikipedia
+                                        </a>
+                                    </li>
+                                `
+                                : ""
+                        }
 
-                                <a
-                                    href="${photo.url}"
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                >
-                                    ${photo.attribution}
-                                </a>
+                    </ul>
+
+                </div>
+
+
+                ${
+                    photosHTML
+                        ? `
+                            <div class="photos">
+
+                                <h3>
+                                    Photos
+                                </h3>
+
+                                <div class="photo-grid">
+                                    ${photosHTML}
+                                </div>
 
                             </div>
-
-                        </div>
-                    `;
-                })
-                .join("");
-        }
-
-
-        const card =
-            document.createElement("div");
-
-        card.className = "taxon-card";
-
-
-        card.innerHTML = `
-
-            <h2>
-                ${taxon.preferred_common_name || "Unknown"}
-            </h2>
-
-            <div class="scientific-name">
-                <i>${taxon.name}</i>
-            </div>
-
-            <div class="native-status">
-                ${taxon.native ? "Native" : "Non-native"}
-            </div>
-
-            <div class="resources">
-
-                <h3>Identification resources</h3>
-
-                <ul>
-
-                    <li>
-                        <a
-                            href="${inaturalistUrl}"
-                            target="_blank"
-                            rel="noopener noreferrer"
-                        >
-                            iNaturalist
-                        </a>
-                    </li>
-
-                    ${
-                        taxon.wikipedia_url
-                        ? `
-                            <li>
-                                <a
-                                    href="${taxon.wikipedia_url}"
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                >
-                                    Wikipedia
-                                </a>
-                            </li>
-                          `
+                        `
                         : ""
-                    }
+                }
 
-                </ul>
-
-            </div>
-
-            ${
-                photosHTML
-                ? `
-                    <div class="photos">
-
-                        <h3>Photos</h3>
-
-                        <div class="photo-grid">
-                            ${photosHTML}
-                        </div>
-
-                    </div>
-                  `
-                : ""
-            }
-
-        `;
+            `;
 
 
-        container.appendChild(card);
-    });
+            container.appendChild(
+                card
+            );
+        }
+    );
 }
 
-const helpButton = document.getElementById("help-button");
-const instructionsModal = document.getElementById("instructions-modal");
-const closeModal = document.getElementById("close-modal");
 
-helpButton.addEventListener("click", () => {
-    instructionsModal.classList.add("show");
-    instructionsModal.setAttribute("aria-hidden", "false");
-});
+// ============================================================
+// Instructions modal
+// ============================================================
 
-closeModal.addEventListener("click", () => {
-    instructionsModal.classList.remove("show");
-    instructionsModal.setAttribute("aria-hidden", "true");
-});
+const helpButton =
+    document.getElementById(
+        "help-button"
+    );
 
-// Close when clicking the dark area outside the dialog
-instructionsModal.addEventListener("click", (event) => {
-    if (event.target === instructionsModal) {
-        instructionsModal.classList.remove("show");
-        instructionsModal.setAttribute("aria-hidden", "true");
+
+const instructionsModal =
+    document.getElementById(
+        "instructions-modal"
+    );
+
+
+const closeModal =
+    document.getElementById(
+        "close-modal"
+    );
+
+
+helpButton.addEventListener(
+    "click",
+    () => {
+
+        instructionsModal.classList.add(
+            "show"
+        );
+
+        instructionsModal.setAttribute(
+            "aria-hidden",
+            "false"
+        );
     }
-});
+);
 
-// Close with the Escape key
-document.addEventListener("keydown", (event) => {
-    if (event.key === "Escape") {
-        instructionsModal.classList.remove("show");
-        instructionsModal.setAttribute("aria-hidden", "true");
+
+closeModal.addEventListener(
+    "click",
+    () => {
+
+        instructionsModal.classList.remove(
+            "show"
+        );
+
+        instructionsModal.setAttribute(
+            "aria-hidden",
+            "true"
+        );
     }
-});
+);
+
+
+// Close when clicking outside dialog.
+
+instructionsModal.addEventListener(
+    "click",
+    event => {
+
+        if (
+            event.target ===
+            instructionsModal
+        ) {
+
+            instructionsModal.classList.remove(
+                "show"
+            );
+
+            instructionsModal.setAttribute(
+                "aria-hidden",
+                "true"
+            );
+        }
+    }
+);
+
+
+// Close with Escape.
+
+document.addEventListener(
+    "keydown",
+    event => {
+
+        if (
+            event.key === "Escape"
+        ) {
+
+            instructionsModal.classList.remove(
+                "show"
+            );
+
+            instructionsModal.setAttribute(
+                "aria-hidden",
+                "true"
+            );
+        }
+    }
+);
+
